@@ -12,7 +12,7 @@ from flask import render_template
 
 GITHUB_ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN', '')
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 g = Github(GITHUB_ACCESS_TOKEN)
 
 def check_pr(pr):
