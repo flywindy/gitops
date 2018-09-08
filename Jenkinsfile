@@ -1,10 +1,10 @@
 pipeline {
-    agent any
+    agent { node { label 'compute' } }
 
     environment {
         // code for manual case
-        //CODE = git(branch: 'master', credentialsId: '2018devopsday', url: 'git@github.com:flywindy/gitops.git')
-        //VERSION = sh (script: './bin/version.sh', returnStdout: true).trim()
+        CODE = git(branch: 'master', credentialsId: '2018devopsday', url: 'git@github.com:flywindy/gitops.git')
+        VERSION = sh (script: './bin/version.sh', returnStdout: true).trim()
         APP_NAME = 'devopsdays'
         REGISTRY = 'docker.trendops.co'
     }
@@ -12,9 +12,11 @@ pipeline {
     stages{
         stage('Build'){
             steps {
-                sh 'docker build --pull -t ${REGISTRY}/${APP_NAME} .'
-                sh 'docker push ${REGISTRY}/${APP_NAME}'
-                sh 'docker rmi  ${REGISTRY}/${APP_NAME} || true'
+                sh 'docker build --pull -t ${REGISTRY}/ops/${APP_NAME} .'
+                sh 'docker tag ${REGISTRY}/ops/${APP_NAME}:latest ${REGISTRY}/ops/${APP_NAME}:${VERSION}'
+                sh 'docker push ${REGISTRY}/ops/${APP_NAME}'
+                sh 'docker push ${REGISTRY}/ops/${APP_NAME}:${VERSION}'
+                sh 'docker rmi  ${REGISTRY}/ops/${APP_NAME} || true'
             }
         }   
     
@@ -63,4 +65,4 @@ pipeline {
             deleteDir() /* clean up our workspace */
         }
     }
-}   
+}      
