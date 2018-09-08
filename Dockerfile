@@ -10,8 +10,8 @@ RUN pip install Flask==1.0.2
 RUN pip install PyGithub==1.40
 RUN pip install PyYAML==3.13
 RUN pip install gunicorn==19.9.0
- 
+RUN pip install gevent==1.3.6 
 # Copy the current directory contents into the container at /app
 ADD . /app
 
-CMD ["gunicorn", "-w 4", "-b 0.0.0.0", "app:app"]
+CMD ["gunicorn", "-k gevent",  "-w 4", "-b 0.0.0.0", "app:app"]
