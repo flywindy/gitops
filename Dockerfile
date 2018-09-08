@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.6-alpine
+FROM python:3.6
 EXPOSE 8000
  
 # Set the working directory to /app
