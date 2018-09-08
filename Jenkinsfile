@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // code for manual case
-        CODE = git(branch: 'master', credentialsId: '2018devopsday', url: 'git@github.com:flywindy/gitops.git')
+        //CODE = git(branch: 'master', credentialsId: '2018devopsday', url: 'git@github.com:flywindy/gitops.git')
         VERSION = sh (script: './bin/version.sh', returnStdout: true).trim()
         APP_NAME = 'devopsdays'
         REGISTRY = 'docker.trendops.co'
