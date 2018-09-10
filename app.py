@@ -13,6 +13,8 @@ from flask import render_template
 GITHUB_ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN', '')
 
 app = Flask(__name__, static_url_path='/static')
+app.config['FREEZER_DESTINATION'] = 'docs'
+
 g = Github(GITHUB_ACCESS_TOKEN)
 
 def check_pr(pr):
