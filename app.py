@@ -2,6 +2,7 @@ import os
 import json
 import time
 import glob
+from urllib.request import urlretrieve
 
 import yaml
 from flask import Flask
@@ -40,7 +41,8 @@ def check_pr(pr):
         return False
 
     # check yaml format
-    with open(files[0].raw_url, 'r') as stream:
+    urlretrieve(files[0].raw_url, filename)
+    with open(filename, 'r') as stream:
         try:
             data = yaml.load(stream)
             if not data.get('displayname') or not data.get('message'):
@@ -48,6 +50,7 @@ def check_pr(pr):
         except yaml.YAMLError as exc:
             print(exc)
             return False
+    os.remove(filename)
 
     return True
 
