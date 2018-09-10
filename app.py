@@ -18,6 +18,7 @@ app.config['FREEZER_DESTINATION'] = 'docs'
 g = Github(GITHUB_ACCESS_TOKEN)
 
 def check_pr(pr):
+    print(pr)
     files = [file for file in pr.get_files()]
     
     # check number of file
@@ -33,15 +34,13 @@ def check_pr(pr):
 
     # check filename
     login = pr.user.login 
-    filename = files[0].filename
+    filename = files[0].filename.replace("messages/", "")
     login_yml = "{login}.yml".format(login=login)
-    print(login_yml)
-    print(filename.replace("messages/", ""))
-    if filename.replace("messages/", "") != login_yml:
+    if filename != login_yml:
         return False
 
     # check yaml format
-    with open(filename, 'r') as stream:
+    with open(files[0].raw_url, 'r') as stream:
         try:
             data = yaml.load(stream)
             if not data.get('displayname') or not data.get('message'):
