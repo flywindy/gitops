@@ -19,23 +19,36 @@ g = Github(GITHUB_ACCESS_TOKEN)
 
 def check_pr(pr):
     files = [file for file in pr.get_files()]
-    print(files)
+    
+    # check number of file
+    print(files) 
     if len(files) != 1:
         return False
 
+    # check file status
     print(files[0].status)
     if files[0].status != 'added':
         print(files[0].status)
         return False
 
+    # check filename
     login = pr.user.login 
     filename = files[0].filename
     login_yml = "{login}.yml".format(login=login)
     print(login_yml)
     print(filename.replace("messages/", ""))
-
-    if filename.replace("messages/", "") == login_yml:
+    if filename.replace("messages/", "") != login_yml:
         return False
+
+    # check yaml format
+    with open(filename, 'r') as stream:
+        try:
+            data = yaml.load(stream)
+            if not data.get('displayname') or not data.get('message'):
+                return False
+        except yaml.YAMLError as exc:
+            print(exc)
+            return False
 
     return True
 
@@ -43,7 +56,7 @@ def check_pr(pr):
 def index():
     if request.method == 'POST':
         payload = json.loads(request.data)
-        if payload['action'] == 'opened' or payload['action'] == 'reopened':
+        if payload.get('action') and payload['action'] in ['opened', 'reopened']:
             repo = g.get_repo(payload['repository']['id'])
             pr_number = payload['number']
             pr = repo.get_pull(pr_number)
