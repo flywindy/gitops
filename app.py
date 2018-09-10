@@ -73,10 +73,13 @@ def index():
     for f in glob.glob("messages/*.yml"):
         with open(f, 'r') as stream:
             data = yaml.load(stream)
+            print(data)
+            print(f)
             try:
                 messages.append({
                     'message': data['message'],
-                    'display_name': data['displayname']
+                    'display_name': data['displayname'],
+                    'username': f.replace("messages/", "").replace(".yml", "")
                 })
             except yaml.YAMLError as exc:
                 print(exc)
