@@ -10,7 +10,9 @@ RUN pip install Flask==1.0.2
 RUN pip install PyGithub==1.40
 RUN pip install PyYAML==3.13
 RUN pip install gunicorn==19.9.0
-RUN pip install gevent==1.3.6 
+RUN pip install gevent==1.3.6
+RUN pip install Frozen-Flask==0.15
+
 # Copy the current directory contents into the container at /app
 ADD . /app
 
